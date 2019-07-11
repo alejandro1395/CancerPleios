@@ -47,7 +47,7 @@ def filter_pleiotropic_single_SNPs(SNPs_dict):
 def get_subset_Cancer_Pleiotropies(catalog_fun, pleio_dict):
     cancer = []
     pleios = pd.DataFrame(columns=['SNP', 'Disease', 'Group',
-    'REGION', 'CHR_ID', 'PleioType'])
+    'REGION', 'CHR_ID', 'CHR_POS', 'PleioType'])
     for entry in pleio_dict:
         subset = catalog_fun.loc[catalog_fun['SNPS'] == entry]
         subset["PleioType"] = ""
@@ -60,7 +60,8 @@ def get_subset_Cancer_Pleiotropies(catalog_fun, pleio_dict):
                 cancer.append(subset)
                 pleios = pleios.append({'SNP': row['SNPS'], 'Disease': row['Disease'],
                 'Group': row['Group'], 'REGION': row['REGION'],
-                'CHR_ID': row['CHR_ID'], 'PleioType': row['PleioType']},
+                'CHR_ID': row['CHR_ID'], 'CHR_POS': row['CHR_POS'],
+                'PleioType': row['PleioType']},
                 ignore_index=True)
                 break
     cancer = pd.concat(cancer)
