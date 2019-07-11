@@ -1,0 +1,38 @@
+// Script parameters
+params.db = "../gwas_catalog_v1.0.2-associations_e96_r2019-04-06.tsv"
+params.src1 = "GWAScatalog_filter.py"
+params.src2 = "Gwas_mergeAge.py"
+
+
+src1 = file(params.src1)
+src2 = file(params.src2)
+db_ch = Channel.fromPath(params.db)
+
+process FirstFilter {
+
+    publishDir "inter_results"
+
+    output:
+    file 'gwas_catalog_filtered.csv' into first_filter
+
+    """
+    module load Python
+    python3 $src1 > gwas_catalog_filtered.csv
+    """
+}
+
+process GwasGroupMerge {
+
+    publishDir "inter_results"
+
+    input:
+    file 'gwas_catalog_filtered.csv' from first_filter
+
+    output:
+    file 'GWAS_Age_merged.csv' into merging
+
+    """
+    module load Python
+    python3 $src2 > GWAS_Age_merged.csv
+    """
+}
